@@ -5,6 +5,7 @@ namespace KubernetesRuntime\Guzzle;
 
 
 use GuzzleHttp\Psr7\Utils;
+use GuzzleHttp\Utils as GuzzleHttpUtils;
 use KubernetesRuntime\APIPatchOperation;
 use Psr\Http\Message\RequestInterface;
 
@@ -33,7 +34,7 @@ final class Middleware
 
                         unset($requestBody['patchOperation']);
 
-                        $modify['body'] = Utils::streamFor(\GuzzleHttp\json_encode($requestBody));
+                        $modify['body'] = Utils::streamFor(GuzzleHttpUtils::jsonEncode($requestBody));
 
                     } else {
                         $contentType = APIPatchOperation::CONTENT_TYPE[APIPatchOperation::PATCH];

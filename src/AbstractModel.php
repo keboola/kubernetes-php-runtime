@@ -165,7 +165,9 @@ abstract class AbstractModel implements ModelInterface
             foreach ($propertyTypes as $PropertyType) {
                 if ($PropertyType->isCollection()) {
                     $values = [];
-                    if (true == ($className = $PropertyType->getCollectionValueType()->getClassName())) {
+
+                    $className = $PropertyType->getCollectionValueTypes() ? $PropertyType->getCollectionValueTypes()[0]->getClassName() : null;
+                    if ($className) {
                         foreach ((array)$value as $valueItem) {
                             /** @var ModelInterface $propertyValue */
                             $PropertyValue = new $className($valueItem);
