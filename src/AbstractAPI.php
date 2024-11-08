@@ -94,7 +94,7 @@ abstract class AbstractAPI
     {
         $contents = (string)$response->getBody();
 
-        if ($response->getHeader('content-type')[0] == 'application/json') {
+        if (($response->getHeader('content-type')[0] ?? null) === 'application/json') {
             $contents = json_decode($contents, true);
         }
 
