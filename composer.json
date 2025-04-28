@@ -17,8 +17,8 @@
         "php": "^8.1",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6|^7",
-        "monolog/monolog": "@stable",
         "phpdocumentor/reflection-docblock": "^3.0|^4.0|^5.0",
+        "psr/log": "^3.0",
         "symfony/property-info": "^5|^6"
     },
     "require-dev": {
@@ -28,8 +28,7 @@
         "sort-packages": true
     },
     "conflict": {
-        "phpdocumentor/reflection-docblock": "<3.2.2",
-        "psr/log": ">=2.0.0"
+        "phpdocumentor/reflection-docblock": "<3.2.2"
     },
     "autoload": {
         "psr-4": {

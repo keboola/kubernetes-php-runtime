@@ -79,7 +79,7 @@ class Logger
     }
 
     /**
-     * @return LoggerInterface|\Monolog\Logger
+     * @return LoggerInterface
      */
     public function getLogger()
     {
