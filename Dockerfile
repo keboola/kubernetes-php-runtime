@@ -3,7 +3,7 @@
 ARG PHP_VERSION=8.1
 ARG XDEBUG_VERSION="-3.1.6"
 
-FROM php:${PHP_VERSION}-cli-bookworm as dev
+FROM php:${PHP_VERSION}-cli-trixie as dev
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG XDEBUG_VERSION
@@ -14,7 +14,7 @@ COPY docker/php/php.ini /usr/local/etc/php/php.ini
 COPY docker/php/xdebug.ini /usr/local/etc/php/conf.d/
 
 RUN apt update -q \
- && apt install -y --no-install-recommends git zip unzip libzip4 libzip-dev zlib1g-dev \
+ && apt install -y --no-install-recommends git zip unzip libzip-dev zlib1g-dev \
  && docker-php-ext-install pcntl zip \
  && apt-get remove --autoremove -y libzip-dev zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
