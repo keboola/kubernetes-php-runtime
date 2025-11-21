@@ -73,6 +73,12 @@ abstract class AbstractAPI
     protected $isStatusFunctionAvailable = true;
 
     /**
+     * @var array
+     * Merged response types (standard + custom), computed once in constructor
+     */
+    readonly private array $responseTypes;
+
+    /**
      * AbstractAPI constructor.
      *
      * @param string $namespace
@@ -81,6 +87,19 @@ abstract class AbstractAPI
     {
         $this->client    = Client::getInstance();
         $this->namespace = $namespace;
+
+        // Merge custom response types with standard types at once (custom takes precedence)
+        $this->responseTypes = array_merge(ResponseTypes::TYPES, static::getCustomResponseTypes());
+    }
+
+    /**
+     * Custom response type mappings for child classes (e.g., custom CRDs)
+     * Format: ['operationId' => ['statusCode.' => 'ClassName']]
+     * Example: ['listAppsKeboolaComV1NamespacedApp' => ['200.' => AppList::class]]
+     */
+    protected static function getCustomResponseTypes(): array
+    {
+        return [];
     }
 
     /**
@@ -102,9 +121,9 @@ abstract class AbstractAPI
             return $contents;
         }
 
-        if (array_key_exists($operationId, ResponseTypes::TYPES) &&
-            array_key_exists($response->getStatusCode() . '.', ResponseTypes::TYPES[$operationId])) {
-            $className = ResponseTypes::TYPES[$operationId][$response->getStatusCode() . '.'];
+        if (array_key_exists($operationId, $this->responseTypes) &&
+            array_key_exists($response->getStatusCode() . '.', $this->responseTypes[$operationId])) {
+            $className = $this->responseTypes[$operationId][$response->getStatusCode() . '.'];
 
             return new $className($contents);
         }
