@@ -11,7 +11,7 @@ class TestModel extends AbstractModel
     public $namespace = 'test-namespace';
 
     /**
-     * @var TestRawModel
+     * @var TestRawModel|null
      */
     public $status;
 
@@ -26,12 +26,12 @@ class TestModel extends AbstractModel
     public $rawModels;
 
     /**
-     * @var AnotherTestModel
+     * @var AnotherTestModel|null
      */
     public $testModel;
 
     /**
-     * @var TestObject
+     * @var TestObject|null
      */
     public $testObject;
 

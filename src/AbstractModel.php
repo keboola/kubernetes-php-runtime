@@ -192,6 +192,15 @@ abstract class AbstractModel implements ModelInterface
                     }
                 }
             }
+        } elseif ($countValue === 0 && is_array($value) && $propertyTypes) {
+            // Handle empty arrays for nullable object properties
+            // When K8s returns an empty array for a nullable object property, convert it to null
+            foreach ($propertyTypes as $PropertyType) {
+                if (!$PropertyType->isCollection() && $PropertyType->getClassName() && $PropertyType->isNullable()) {
+                    $value = null;
+                    break;
+                }
+            }
         }
         $this->$index = $value;
 
