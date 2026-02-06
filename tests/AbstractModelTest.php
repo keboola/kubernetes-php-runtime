@@ -69,4 +69,46 @@ class AbstractModelTest extends TestCase
         $TestRawModel = new TestRawModel();
         $this->assertTrue($TestRawModel->isRawObject());
     }
+
+    public static function provideEmptyArrayHandlingTestData(): iterable
+    {
+        yield 'empty array for nullable object property (status)' => [
+            'input' => ['status' => []],
+            'propertyName' => 'status',
+            'expectedValue' => null,
+        ];
+
+        yield 'empty array for nullable object property (testModel)' => [
+            'input' => ['testModel' => []],
+            'propertyName' => 'testModel',
+            'expectedValue' => null,
+        ];
+
+        yield 'empty array for nullable object property (testObject)' => [
+            'input' => ['testObject' => []],
+            'propertyName' => 'testObject',
+            'expectedValue' => null,
+        ];
+
+        yield 'missing nullable object property remains null' => [
+            'input' => [],
+            'propertyName' => 'status',
+            'expectedValue' => null,
+        ];
+
+        yield 'empty array for collection property remains empty array' => [
+            'input' => ['metadata' => []],
+            'propertyName' => 'metadata',
+            'expectedValue' => [],
+        ];
+    }
+
+    /**
+     * @dataProvider provideEmptyArrayHandlingTestData
+     */
+    public function testEmptyArrayHandling(array $input, string $propertyName, mixed $expectedValue): void
+    {
+        $TestModel = new TestModel($input);
+        $this->assertEquals($expectedValue, $TestModel->$propertyName);
+    }
 }
