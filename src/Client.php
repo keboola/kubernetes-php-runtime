@@ -32,6 +32,13 @@ class Client
      */
     protected $guzzle;
 
+    /**
+     * The handler the Guzzle client was created with.
+     *
+     * @var callable
+     */
+    private $handler;
+
     protected $caCert;
     protected $clientCert;
     protected $clientKey;
@@ -104,6 +111,7 @@ class Client
         $HandlerStack->push(Middleware::setPatchOperation(), 'setPatchOperationContentType');
 
         $defaultOptions['handler'] = $HandlerStack;
+        $this->handler             = $HandlerStack;
 
         $this->defaultOptions = array_merge($defaultOptions, $guzzleOptions);
 
@@ -149,8 +157,15 @@ class Client
     {
         $json    = null;
         $options = array_merge($this->defaultOptions, $options);
+        // The Guzzle client already uses this handler. Passing it per request is deprecated since
+        // guzzlehttp/guzzle 7.12, and Guzzle 8 will ignore request-level handlers.
+        if ($options['handler'] === $this->handler) {
+            unset($options['handler']);
+        }
 
-        return $this->guzzle->request($method, $uri, $options);
+        // The API classes pass the method in lower case. Guzzle 7.11 deprecates that, and Guzzle 8
+        // will send the method as given.
+        return $this->guzzle->request(strtoupper($method), $uri, $options);
     }
 
     /**
